@@ -1,0 +1,125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!244 &-8606771651179609779
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: bd8335382eceb18468ab0b8b2d5d0730
+  m_EffectName: Flange
+  m_MixLevel: 7fa860943832adb4fb3bda6a35105b04
+  m_Parameters:
+  - m_ParameterName: Drymix
+    m_GUID: 58b8501f8bd5cac439efa01437d507e1
+  - m_ParameterName: Wetmix
+    m_GUID: 41f19407d87d51641a401a38a6e3bad2
+  - m_ParameterName: Depth
+    m_GUID: 11193bbe472eac1448e8b83cba1b49e6
+  - m_ParameterName: Rate
+    m_GUID: 8dc8037d4341cd34e9413e97b0d493b0
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!241 &24100000
+AudioMixerController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: DamagedMixer
+  m_OutputGroup: {fileID: 0}
+  m_MasterGroup: {fileID: 24300002}
+  m_Snapshots:
+  - {fileID: 24500006}
+  m_StartSnapshot: {fileID: 24500006}
+  m_SuspendThreshold: -80
+  m_EnableSuspend: 1
+  m_UpdateMode: 0
+  m_ExposedParameters: []
+  m_AudioMixerGroupViews:
+  - guids:
+    - e1ec28ab3c955794bb9ae13360ebe2b9
+    name: View
+  m_CurrentViewIndex: 0
+  m_TargetSnapshot: {fileID: 24500006}
+--- !u!243 &24300002
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Master
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: e1ec28ab3c955794bb9ae13360ebe2b9
+  m_Children: []
+  m_Volume: 9feabde1f1160484996adaf99768f368
+  m_Pitch: 89615413753c1fc4b88b17ae5c680c15
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: 24400004}
+  - {fileID: -8606771651179609779}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
+--- !u!244 &24400004
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 4063d642b939eb549b125b1d91d8766b
+  m_EffectName: Attenuation
+  m_MixLevel: fdee5361d0966e640b46c7d0c36368b7
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!245 &24500006
+AudioMixerSnapshotController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Snapshot
+  m_AudioMixer: {fileID: 24100000}
+  m_SnapshotID: 1ece0e9f881d74147ad77ffc4b25a4f7
+  m_FloatValues:
+    df038fe02426ae3489e7a2a8e0d0a7d4: 10000
+    875fae4195a796540a64fb690d5375bc: 0.508
+    f2ed56c130bc39c43aed1fbf053d3cf8: 1
+    9feabde1f1160484996adaf99768f368: 0
+    5d21081252574674e86035e354b1bdf3: 0.498
+    bd2d8932c8ac57c46a966f3efedc7124: 20
+    eb7833827c76d994a95b8280718b7497: 1
+    72b87ca24a82ee845b70983057d5db7c: 2
+    fecc28635446d4b4981569da4c7d43c6: 0.508
+    bdcaadd3be5b30c488c21b0434ff8d3f: 1.3
+    d2d5e3e3442b7564eb5f571f619c62f6: 1024
+    8e0133f3e1e9b4444909d6f642586060: 1
+    41f19407d87d51641a401a38a6e3bad2: 0.5
+    2d916d071afdc624893ee39875287be1: 0
+    2a4a0db794332b24d90128b6c597ba18: 0.316
+    768985c78dc18d94f82d98254ed9403a: 62
+    cdc3ac09259e0f44292b2819b6f85286: 5000
+    75bff0b9ce73bee4dacd116d4095c4b4: 200
+    4d4823b97a1e48d4aa78ae8f5b0309ea: 11000
+    5486881ad3b8f30478d7ba97ec335a2f: 1
+    9574c01b4e2e2ef4a93394a83a6029b6: 0
+    023a1c8bb64beaf43b2812a9605b4929: 1
+    34a877db6241986459fa923920c8bb2d: 0.497
+    59cbffeb4e95cbe4c9f103394d5c7bb6: 22000
+    3d45088c45d9efe4790dde134861caf8: 0.5
+    54d30b8c79e820f4486def95917e1265: 1
+    0420b4ac2b3ef4d4c9ae2939ee1564c6: 0
+    8dc8037d4341cd34e9413e97b0d493b0: 0.7
+    f51316dd5f25a8f4186d20078b7dae6a: 0
+    14e3d39e31c855248b6a3e305f86ab5f: 1.5
+    edfda1ae659f32c439aba745524b67a1: 0
+    9dec38ded60767a4c929604e919228a0: 0
+    58b8501f8bd5cac439efa01437d507e1: 0.5
+    7fd1c86f600a5c04d910d150bcf2046f: -32.1
+  m_TransitionOverrides: {}
