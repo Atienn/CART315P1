@@ -1,19 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Misc;
-using System;
 
 public class Attack : MonoBehaviour
 {
     static Color noneColor = new Color(0f, 0f, 0f, 0f);
     static Color attkColor = new Color(1f, 0f, 0f, 1f);
     static Color warnColor = new Color(1f, 0.5f, 0f, 1f);
+    static Color hitcColor = new Color(0.5f, 1f, 0f, 1f);
+
 
     public enum AimMode {
         None,
         LookAt,
-        MoveTo
+        MoveTo,
+        MoveRandom
     }
 
     [SerializeField] AimMode aimMode;
@@ -22,7 +25,7 @@ public class Attack : MonoBehaviour
     const float attkFade = 0.025f;
     const float warnFade = 0.025f;
 
-    Collider[] hitBox;
+    Collider[] hitBoxes;
     MeshRenderer[] render;
 
     float alpha;
@@ -31,18 +34,27 @@ public class Attack : MonoBehaviour
 
 
     void Start() {
-        hitBox = GetComponentsInChildren<Collider>();
+        hitBoxes = GetComponentsInChildren<Collider>();
         render = GetComponentsInChildren<MeshRenderer>();
 
         fadeStrat = StandardMethods.None;
-        if(this.aimMode == AimMode.LookAt) {
-            this.AimStrat = LookAtAim;
-        }
-        else if (this.aimMode == AimMode.MoveTo) {
-            this.AimStrat = MoveToAim;
-        }
-        else {
-            this.AimStrat = NoAim;
+
+        switch(this.aimMode) {
+            case AimMode.LookAt:
+                this.AimStrat = LookAtAim;
+                break;
+
+            case AimMode.MoveTo:
+                this.AimStrat = MoveToAim;
+                break;
+
+            case AimMode.MoveRandom:
+                this.AimStrat = MoveToRand;
+                break;
+
+            default:
+                this.AimStrat = NoAim;
+                break;
         }
 
         ChangeColor(noneColor);
@@ -61,9 +73,24 @@ public class Attack : MonoBehaviour
         Enable(Attack.warnColor);
         fadeStrat = WarnFade;
     }
-    public void Trigger() {
+    public bool Trigger() {
+
         Enable(Attack.attkColor);
         fadeStrat = AttkFade;
+
+        //Check each hitbox against each entity.
+        foreach(Entity target in EntityManager.Instance.all) {
+            foreach (Collider hitBox in hitBoxes) {
+                //If the closest point within the collider to the 
+                //target is the target itself, then the attack hit.
+                if (hitBox.ClosestPoint(target.transform.position) == target.transform.position) {
+                    target.OnHit();
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
 
@@ -81,6 +108,13 @@ public class Attack : MonoBehaviour
         alpha -= attkFade;
         if (alpha < 0) { Disable(); }
         else { ChangeColor(new Color(attkColor.r, attkColor.g, attkColor.b, alpha)); }
+    }
+    //Hit confirm fade, unused.
+    void HitCFade()
+    {
+        alpha -= attkFade;
+        if (alpha < 0) { Disable(); }
+        else { ChangeColor(new Color(hitcColor.r, hitcColor.g, hitcColor.b, alpha)); }
     }
 
 
@@ -109,6 +143,7 @@ public class Attack : MonoBehaviour
         }
     }
 
+
     void NoAim(Vector3 target) { }
     void LookAtAim(Vector3 target) {
         this.transform.forward = (this.transform.position - target).normalized;
@@ -116,18 +151,23 @@ public class Attack : MonoBehaviour
     void MoveToAim(Vector3 target) {
         transform.position = target;
     }
+    void MoveToRand(Vector3 target) {
+        Vector3 rand = UnityEngine.Random.onUnitSphere;
+        rand.y = 0f;
+        transform.localPosition = rand * Mathf.Pow(UnityEngine.Random.Range(5f, 10f), 2);
+    }
 }
 
+//Allows class to be displayed/edited in inspector.
 [Serializable]
 class TimedAttack {
     public Attack atk;
-    //public long aimTime;
-    public long attkTime;
+    public int time;
     public bool isWarning;
 
     public TimedAttack(TimedAttack ta) {
         this.atk = ta.atk;
-        this.attkTime = ta.attkTime; 
+        this.time = ta.time;
         this.isWarning = ta.isWarning;
     } 
 }

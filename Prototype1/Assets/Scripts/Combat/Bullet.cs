@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
-{
+public class Bullet : MonoBehaviour {
+
+    public Gunship firedFrom;
     public Rigidbody rb;
-    public Vector3 vel;
     short timer;
 
     void Awake() {
@@ -20,5 +20,6 @@ public class Bullet : MonoBehaviour
 
     void OnCollisionEnter(Collision collision) {
         GameObject.Destroy(this.gameObject);
+        firedFrom.BulletHit();
     }
 }

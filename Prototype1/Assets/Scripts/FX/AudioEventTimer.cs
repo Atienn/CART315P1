@@ -35,7 +35,6 @@ public class AudioEventTimer : MonoBehaviour
                 //          ||          \\
                 events[0].trigger.Invoke();
                 events.RemoveAt(0);
-                Debug.Log(events.Count);
             }
             else {
                 untilNext = events[0].time - source.timeSamples;

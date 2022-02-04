@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Went through several iterations, super messy.
 public class AudioAnalyzer : MonoBehaviour {
 
     static short[] freqSeparators = { 60, 250, 500, 2000, 4000, 6000, 20000, short.MaxValue };
@@ -14,15 +15,22 @@ public class AudioAnalyzer : MonoBehaviour {
     float[] spectrumData;
 
     [Header("Waveform")]
-    [SerializeField] LineRenderer waveform;
-    Vector3[] wfVerticies;
+    [SerializeField] LineRenderer waveformTop;
+    [SerializeField] LineRenderer waveformBot;
+    [SerializeField] float waveWidth = 450f;
+    Vector3[] wfVerticiesTR;
+    Vector3[] wfVerticiesTL;
+    Vector3[] wfVerticiesBR;
+    Vector3[] wfVerticiesBL;
     //float[] spectrumMax;
 
+    /*
     [Header("Reduced Spectrum / Bands")]
     [SerializeField] byte separationMethod = 0;
     [SerializeField] Transform[] bands;
     float[] reduxSpectrData;
     [SerializeField] short[] reduxSpectrRanges;
+    */
 
     void Start() {
 
@@ -34,7 +42,38 @@ public class AudioAnalyzer : MonoBehaviour {
         samplesAmt /= 2;
 
 
+        {
+            //spectrumMax = new float[samplesAmt];
+            //For circular pattern.
+            /*
+                pos[i] = new Vector3(
+                    Mathf.Sin(Mathf.PI * i / samples),
+                    Mathf.Cos(Mathf.PI * i / samples),
+                    -1f
+                );
+            */
+
+
+            //Initialize the waveform verticies.
+            waveformTop.positionCount = 4 * samplesAmt;
+            wfVerticiesTR = new Vector3[samplesAmt];
+            for (int i = 0; i < samplesAmt; i++) {
+                wfVerticiesTR[i] = new Vector3((waveWidth / samplesAmt) * i, -50f, 25f);
+
+                wfVerticiesTL[i] = wfVerticiesTR[i];
+                wfVerticiesTL[i].x *= -1;
+
+                wfVerticiesBR[i] = wfVerticiesTL[i];
+                wfVerticiesBR[i].z *= -1;
+
+                wfVerticiesBL[i] = wfVerticiesTL[i];
+                wfVerticiesBL[i].z *= -1;
+            }
+        }
+
+
         //Redux spectrum data setup.
+        /*
         {
             //Gets the number of consecutive powers of 2 (starting from 1) can fit in the amount of samples.
             byte reduxSpectrLength = (byte)(Mathf.Log(samplesAmt, 2));
@@ -79,27 +118,7 @@ public class AudioAnalyzer : MonoBehaviour {
                 //reduxSpectrRanges[reduxSpectrRanges.Length - 1] += 2;
             }
         }
-
-
-        {
-            //spectrumMax = new float[samplesAmt];
-
-            //Initialize the waveform verticies.
-            waveform.positionCount = samplesAmt;
-            wfVerticies = new Vector3[samplesAmt];
-            for (short i = 0; i < samplesAmt; i++) {
-                wfVerticies[i] = new Vector3((25f / samplesAmt) * i - 12f, 0, -1f);
-
-                /*
-                pos[i] = new Vector3(
-                    Mathf.Sin(Mathf.PI * i / samples),
-                    Mathf.Cos(Mathf.PI * i / samples),
-                    -1f
-                );
-                 */
-            }
-            waveform.SetPositions(wfVerticies);
-        }
+        */
     }
 
 
@@ -114,11 +133,17 @@ public class AudioAnalyzer : MonoBehaviour {
 
         //Make verticies match position 
         for (short i = 0; i < samplesAmt; i++) {
+
+            wfVerticiesTR[i].z = spectrumData[i] * visualScaling;
+            wfVerticiesTL[i].z = spectrumData[i] * visualScaling;
+            wfVerticiesBR[i].z = spectrumData[i] * -visualScaling;
+            wfVerticiesBL[i].z = spectrumData[i] * -visualScaling;
+
             //if(spectrumData[i] > spectrumMax[i]) {
             //    spectrumMax[i] = spectrumData[i];
             //}
 
-            wfVerticies[i].y = (Mathf.Sqrt(spectrumData[i]) * visualScaling + wfVerticies[i].y) / 2;
+            // wfVerticiesTR[i].z = (Mathf.Sqrt(spectrumData[i]) * visualScaling + wfVerticiesTR[i].z) / 2;
 
             //Average of 2 last frames.
             //wfVerticies[i].y = Mathf.Sqrt((spectrumData[i] + wfVerticies[i].y) / 2) * 50;
@@ -129,9 +154,24 @@ public class AudioAnalyzer : MonoBehaviour {
             //pos[i].x = (data[i]*5 + 1) * Mathf.Sin(Mathf.PI * i / samples);
             //pos[i].y = (data[i]*5 + 1) * Mathf.Cos(Mathf.PI * i / samples);
         }
-        waveform.SetPositions(wfVerticies);
+
+        int j = 0;
+        for(; j < wfVerticiesTR.Length; j++) {
+            waveformTop.SetPosition(j, wfVerticiesTR[j]);
+        }
+        for (; j < wfVerticiesBR.Length * 2; j++) {
+
+        }
+        for (; j < wfVerticiesBL.Length * 3; j++) {
+
+        }
+        for (; j < wfVerticiesTL.Length * 4; j++) {
+
+        }
+        //waveformTop.SetPositions(wfVerticiesTR);
     }
 
+    /*
     void BandListRedux() {
         source.GetSpectrumData(spectrumData, 0, FFTWindow.Blackman);
         
@@ -149,4 +189,5 @@ public class AudioAnalyzer : MonoBehaviour {
             bands[i].localScale = new Vector3(1, spectrSum * visualScaling / reduxSpectrRanges[i], 1);
         }
     }
+    */
 }
